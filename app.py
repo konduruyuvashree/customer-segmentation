@@ -197,24 +197,21 @@ for i in range(k):
         stats = cluster_stats.loc[i]
         label, strategy = generate_insight(i, stats)
         count = len(df_clean[df_clean["Cluster"] == i])
-        color = cluster_colors[i]
-        income_line = "💰 Income: ${:.0f}k<br>".format(stats["Annual Income (k$)"]) if "Annual Income (k$)" in features else ""
-        score_line = "⭐ Score: {:.0f}<br>".format(stats["Spending Score (1-100)"]) if "Spending Score (1-100)" in features else ""
-        age_line = "🎂 Avg Age: {:.0f}".format(stats["Age"]) if "Age" in features else ""
 
-        st.markdown(f"""
-        <div class="metric-card" style="border-left-color:{color}">
-            <span class="cluster-tag" style="background:{color};color:#0a0a0f;">C{i}</span>
-            <strong>{label}</strong><br><br>
-            <span style="font-family:'Space Mono',monospace;font-size:0.8rem;color:#aaa;">
-            👥 {count} customers<br>
-            {income_line}
-            {score_line}
-            {age_line}
-            </span><br><br>
-            <em style="font-size:0.82rem;color:#c9a84c;">📌 {strategy}</em>
-        </div>
-        """, unsafe_allow_html=True)
+        income_val = "${:.0f}k".format(stats["Annual Income (k$)"]) if "Annual Income (k$)" in features else "N/A"
+        score_val = "{:.0f}".format(stats["Spending Score (1-100)"]) if "Spending Score (1-100)" in features else "N/A"
+        age_val = "{:.0f}".format(stats["Age"]) if "Age" in features else "N/A"
+
+        st.markdown(f"**C{i} — {label}**")
+        st.markdown(f"👥 **{count}** customers")
+        if "Annual Income (k$)" in features:
+            st.markdown(f"💰 Income: **{income_val}**")
+        if "Spending Score (1-100)" in features:
+            st.markdown(f"⭐ Score: **{score_val}**")
+        if "Age" in features:
+            st.markdown(f"🎂 Age: **{age_val}**")
+        st.info(f"📌 {strategy}")
+        st.markdown("")
 
 # ── Plots ─────────────────────────────────────────────────────────────────────
 st.markdown("---")
